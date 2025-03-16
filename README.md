@@ -8,6 +8,6 @@ Prerequisites
 * CMake (for building the project)
 * g++ (for compiling C++ code)
 * OpenCV version 4.10.0 or higher
-* 
+* opencv-devel (in order to compile)
 
 
