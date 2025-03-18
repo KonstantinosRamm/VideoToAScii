@@ -1,6 +1,7 @@
 #include <opencv2/opencv.hpp>
 
 
+
 int main(void)
 {
     cv::Mat image = cv::imread("wall.jpg");

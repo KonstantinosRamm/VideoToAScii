@@ -1,4 +1,4 @@
 #!/bin/bash
 
-g++ -o main main.cpp `pkg-config --cflags --libs opencv4`
+g++ -o main src/*.cpp `pkg-config --cflags --libs opencv4`
 
