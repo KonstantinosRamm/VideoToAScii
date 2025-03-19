@@ -6,13 +6,66 @@
 #include <cstdlib>
 #include <sys/ioctl.h> // ioctl and struct winsize
 #include <unistd.h> // for STDOUT_FILENO
+#include <getopt.h>
 #include "ansi.hpp"
 #include "pixeltoascii.hpp"
+#include "options.hpp"
 
-
+/**
+ * @brief  video process function to convert to ascii
+ * @param pattern pattern to choose .If invalid number passed as argument it will return pattern 1 (index 0)
+ * @return 0 if all operations succeeded else -1
+ */
+int process_video(int pattern = 0);
 
 
 int main(int argc,char * argv[])
+{
+    //pattern to choose from for ascii display style
+    int pattern = 0;
+
+
+    int option;
+    //read options from terminal
+    while ((option = getopt(argc, argv, "p:")) != -1)  // Corrected parentheses
+    {
+        switch (option)
+        {
+            case 'p':
+                pattern = strToInteger(optarg);
+                break;
+        }
+    }
+    
+    process_video(pattern);
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int process_video(int pattern)
 {
     //read video (hardcoded for now to sample/sample.txt)
     cv::VideoCapture video("sample/sample.mp4");
@@ -21,7 +74,6 @@ int main(int argc,char * argv[])
         std::cerr << "[ERROR] opening video\n";
         return -1;
     }
-
     //store terminal window dimensions
     struct winsize size;
     
@@ -75,7 +127,7 @@ int main(int argc,char * argv[])
         {
             for(int j = 0 ; j < cols; j++)
             {
-                int pixelValue = pixelToAscii(resized_mat.at<uchar>(i,j));
+                int pixelValue = pixelToAscii(resized_mat.at<uchar>(i,j),pattern);
                 frame_ascii += pixelValue;
             }
             frame_ascii += "\n";
@@ -91,9 +143,8 @@ int main(int argc,char * argv[])
 
     }
 
-    cv::waitKey();
     video.release();
+    cv::waitKey();
 
     return 0;
 }
-
