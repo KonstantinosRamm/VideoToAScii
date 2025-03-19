@@ -3,7 +3,12 @@
 #include <chrono>
 #include <thread>
 #include <string>
+#include <cstdlib>
+#include <sys/ioctl.h> // ioctl and struct winsize
+#include <unistd.h> // for STDOUT_FILENO
+#include "ansi.hpp"
 #include "pixeltoascii.hpp"
+
 
 
 
@@ -17,9 +22,13 @@ int main(int argc,char * argv[])
         return -1;
     }
 
-    //dimentions 
-    int width = 100;
-    int height = 40;
+    //store terminal window dimensions
+    struct winsize size;
+    
+
+    //dimentions  
+    int width = 0 ;
+    int height  = 0;
     cv::Mat frame,grayScale,resized_mat;
     //get fps 
     double fps = video.get(cv::CAP_PROP_FPS);
@@ -34,6 +43,19 @@ int main(int argc,char * argv[])
 
     while(true)
     {
+
+        //read current dimentions in order to resize accordingly
+        ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+        if (size.ws_row != height || size.ws_col != width)
+        {
+
+            height = size.ws_row;
+            width = size.ws_col;
+            //clear screen  and reset cursor to avoid messing up character printing 
+            system("clear");  
+
+        }
+
         video >> frame;
         //check for the end of video
         if(frame.empty())
@@ -60,7 +82,7 @@ int main(int argc,char * argv[])
         }
 
         //move the cursor and update pixels for more smooth transitions
-        std::cout << "\033[H";
+        std::cout << RESET_CURSOR;
         std::cout << frame_ascii;
         //wait for some time between each frame and clear screen for next iteration
         std::this_thread::sleep_for(std::chrono::milliseconds( frame_ms_duration));
