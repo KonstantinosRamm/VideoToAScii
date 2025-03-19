@@ -11,3 +11,8 @@ A C++ application that converts video files into ASCII art. This tool processes 
 * opencv-devel (in order to compile)
 
 
+# TODO 
+* Add option to define path
+* improve time per frame logic 
+
+
