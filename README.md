@@ -1,9 +1,9 @@
 # VideoToAscii
 
 A C++ application that converts video files into ASCII art. This tool processes video frames through OpenCV and translates them into text-based representations.
-Prerequisites
 
-# To build and run the application, you will need the following:
+
+# Prerequisites
 
 * CMake (for building the project)
 * g++ (for compiling C++ code)
