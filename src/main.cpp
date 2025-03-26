@@ -96,6 +96,8 @@ int process_video(int pattern)
     while(true)
     {
 
+        //get starting time
+        auto start_time = std::chrono::high_resolution_clock::now();
         //read current dimentions in order to resize accordingly
         ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
         if (size.ws_row != height || size.ws_col != width)
@@ -136,8 +138,18 @@ int process_video(int pattern)
         //move the cursor and update pixels for more smooth transitions
         std::cout << RESET_CURSOR;
         std::cout << frame_ascii;
-        //wait for some time between each frame and clear screen for next iteration
-        std::this_thread::sleep_for(std::chrono::milliseconds( frame_ms_duration));
+
+        auto end_time = std::chrono::high_resolution_clock::now(); // end time 
+
+        //calculate processing time
+       auto processing_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+        long sleep_time = frame_ms_duration - processing_time;
+
+        //check if we need to wait before each frame
+        if(sleep_time > 0)
+        {
+             std::this_thread::sleep_for(std::chrono::milliseconds( sleep_time));
+        }
 
 
 
