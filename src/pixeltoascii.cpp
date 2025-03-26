@@ -10,9 +10,12 @@ char pixelToAscii(int pixelValue,int ascii_index)
                                                                      //gradient reverse
                                                                       " .:-=+*#%@",
                                                                       //more gradient
-                                                                      "@%#*+=-:.              '"
+                                                                      "@%#*+=-:.                                  '",
                                                                       //more gradient reverse
-                                                                      "'             .:-=+*#%@!",
+                                                                      "'                                 .:-=+*#%@!"
+
+
+    
                                                                      
                                                                         
 
