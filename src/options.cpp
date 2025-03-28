@@ -26,3 +26,4 @@ int strToInteger(const std::string& str)
     //return 0 in case of failure to convert str to 0 (dafault argument)
     return 0;
 }
+

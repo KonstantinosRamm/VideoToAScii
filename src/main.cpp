@@ -14,30 +14,42 @@
 /**
  * @brief  video process function to convert to ascii
  * @param pattern pattern to choose .If invalid number passed as argument it will return pattern 1 (index 0)
+ * @param file video to open
  * @return 0 if all operations succeeded else -1
  */
-int process_video(int pattern = 0);
+
+
+ 
+int process_video(int pattern = 0,std::string file = "sample/sample.mp4");
 
 
 int main(int argc,char * argv[])
 {
     //pattern to choose from for ascii display style
     int pattern = 0;
+    //video to open
+    std::string file ;
 
 
     int option;
     //read options from terminal
-    while ((option = getopt(argc, argv, "p:")) != -1)  // Corrected parentheses
+    while ((option = getopt(argc, argv, "p:f:")) != -1)  // Corrected parentheses
     {
         switch (option)
         {
+            //pattern 
             case 'p':
                 pattern = strToInteger(optarg);
+                break;
+
+            case 'f':
+                //check if path is empty and open default video if invalid path provided
+                file = optarg;
                 break;
         }
     }
     
-    process_video(pattern);
+    process_video(pattern,file);
     return 0;
 }
 
@@ -65,14 +77,21 @@ int main(int argc,char * argv[])
 
 
 
-int process_video(int pattern)
+int process_video(int pattern,std::string file)
 {
-    //read video (hardcoded for now to sample/sample.txt)
-    cv::VideoCapture video("sample/sample.mp4");
+    //read video from file 
+    cv::VideoCapture video(file);
     if(!video.isOpened())
     {
         std::cerr << "[ERROR] opening video\n";
-        return -1;
+        std::cerr << "Falling back to default video\n";
+
+        //recheck if default video opened 
+         if(! video.open("sample/sample.mp4"))
+        {
+            std::cerr << "[ERROR] could not locate default video" << std::endl;
+            return -1;
+        }
     }
     //store terminal window dimensions
     struct winsize size;
