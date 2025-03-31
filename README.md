@@ -63,3 +63,13 @@ cd VideoToAScii
 ```
 
 
+# Help 
+in order to see the manual 
+```bash
+cd VideoToAScii
+```
+
+```bash
+man ./man/videoToAscii.1
+```
+
