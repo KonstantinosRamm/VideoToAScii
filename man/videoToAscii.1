@@ -1,0 +1,17 @@
+.TH VideoToAscii 1 "March 2025" "Version1.0" "User commands"
+.SH NAME
+VideoToAscii \- Convert video files into ASCII art.
+.SH SYNOPSIS
+.B videoToAscii
+[\fIOPTIONS\fR] \fIFILE\fR
+.SH DESCRIPTION
+VideoToAscii is a tool that processes video frames using OpenCV and represents it into the terminal as ASCII Art.
+.SH OPTIONS
+.TP
+.B \-p \fINUMBER\fR, \-\-pattern \fINUMBER\fR
+Select an ASCII pattern (0-3).In case of invalid number the default pattern is used instead (0).
+.B \-f \fIFILE\fR, \-\-file \fIFILE\fR
+Specify a custom video file to process.If non provided the default is used instead
+which is located at sample/sample.mp4
+
+
