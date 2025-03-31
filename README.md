@@ -57,7 +57,7 @@ cd VideoToAscii
 # Run
 
 ```bash
-./main
+./videoToAscii
 ```
 
 
