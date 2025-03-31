@@ -11,8 +11,23 @@ A C++ application that converts video files into ASCII art. This tool processes 
 * opencv-devel (in order to compile)
 
 
-# TODO 
-* Add option to define path
+# Features
+* Custom Video Path
+* Choose between a range of patterns
 
 
-
+# Installation
+First install opencv and opencv-devel
+* Fedora:
+```bash
+sudo dnf install opencv opencv-devel
+```
+* Debian:
+```bash
+sudo apt install libopencv-dev
+```
+* Arch:
+```bash
+sudo pacman -S opencv
+```
+* For official opencv documentation [click here](https://opencv.org/)
