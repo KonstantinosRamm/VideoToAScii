@@ -73,3 +73,5 @@ cd VideoToAScii
 man ./man/videoToAscii.1
 ```
 
+# TODO 
+* Try embossing effect 
