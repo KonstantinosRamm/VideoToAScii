@@ -15,12 +15,13 @@
  * @brief  video process function to convert to ascii
  * @param pattern pattern to choose .If invalid number passed as argument it will return pattern 1 (index 0)
  * @param file video to open
+ * @param sobel determine wheter to apply sobel operator or not
  * @return 0 if all operations succeeded else -1
  */
 
 
  
-int process_video(int pattern = 0,std::string file = "sample/sample.mp4");
+int process_video(int pattern = 0,std::string file = "sample/sample.mp4",bool sobel = false);
 
 
 int main(int argc,char * argv[])
@@ -30,10 +31,10 @@ int main(int argc,char * argv[])
     //video to open
     std::string file ;
 
-
+    bool sobel = false;
     int option;
     //read options from terminal
-    while ((option = getopt(argc, argv, "p:f:")) != -1)  // Corrected parentheses
+    while ((option = getopt(argc, argv, "p:f:s")) != -1)  // Corrected parentheses
     {
         switch (option)
         {
@@ -46,10 +47,15 @@ int main(int argc,char * argv[])
                 //check if path is empty and open default video if invalid path provided
                 file = optarg;
                 break;
+            case 's':
+                //sobel operator
+                sobel = true;
+                break;
+                
         }
     }
     
-    process_video(pattern,file);
+    process_video(pattern,file,sobel);
     return 0;
 }
 
@@ -77,7 +83,7 @@ int main(int argc,char * argv[])
 
 
 
-int process_video(int pattern,std::string file)
+int process_video(int pattern,std::string file,bool sobel)
 {
     //read video from file 
     cv::VideoCapture video(file);
@@ -142,6 +148,24 @@ int process_video(int pattern,std::string file)
         
         int rows = resized_mat.rows;
         int cols = resized_mat.cols;
+
+
+        //calculate sobel operator
+        if(sobel)
+        {
+            cv::Mat grad_x,grad_y,sobel_output;
+            //Compute x gradient
+            cv::Sobel(resized_mat, grad_x, CV_64F, 1, 0, 3);
+            //Compute y gradient
+            cv::Sobel(resized_mat, grad_y, CV_64F, 0, 1, 3);
+            //Compute magnitude
+            cv::magnitude(grad_x, grad_y, sobel_output);
+
+            //normalize to 8-bit for conversion to ascii(map values to range 0-255)
+            //and store the output to resized_mat
+            //cv::NORM_MINMAX range based formula
+            cv::normalize(sobel_output, resized_mat, 0, 255, cv::NORM_MINMAX, CV_8U);
+        }
 
         //read each pixel and print its ascii value and print to terminal
         for(int  i = 0; i < rows; i++)

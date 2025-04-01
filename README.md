@@ -14,7 +14,7 @@ A C++ application that converts video files into ASCII art. This tool processes 
 # Features
 * Custom Video Path
 * Choose between a range of patterns
-
+* Sobel operator filter for edge detection 
 
 # Installation
 First install opencv and opencv-devel

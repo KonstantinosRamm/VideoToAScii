@@ -12,16 +12,12 @@ char pixelToAscii(int pixelValue,int ascii_index)
                                                                       //more gradient
                                                                       "@%#*+=-:.                                  '",
                                                                       //more gradient reverse
-                                                                      "'                                 .:-=+*#%@!"
-
+                                                                      "'                                 .:-=+*#%@!",
 
     
-                                                                     
-                                                                        
-
-
-
     };
+
+    
     //ensure ascii_index is not out of bonds of string  array
     if(ascii_index < 0 || ascii_index >= sizeof(asciiChars) / sizeof(asciiChars[0]))
     {
