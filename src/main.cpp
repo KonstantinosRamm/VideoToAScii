@@ -18,9 +18,6 @@
  * @param sobel determine wheter to apply sobel operator or not
  * @return 0 if all operations succeeded else -1
  */
-
-
- 
 int process_video(int pattern = 0,std::string file = "sample/sample.mp4",bool sobel = false);
 
 
@@ -30,7 +27,6 @@ int main(int argc,char * argv[])
     int pattern = 0;
     //video to open
     std::string file ;
-
     bool sobel = false;
     int option;
     //read options from terminal
@@ -91,7 +87,6 @@ int process_video(int pattern,std::string file,bool sobel)
     {
         std::cerr << "[ERROR] opening video\n";
         std::cerr << "Falling back to default video\n";
-
         //recheck if default video opened 
          if(! video.open("sample/sample.mp4"))
         {
@@ -101,8 +96,6 @@ int process_video(int pattern,std::string file,bool sobel)
     }
     //store terminal window dimensions
     struct winsize size;
-    
-
     //dimentions  
     int width = 0 ;
     int height  = 0;
@@ -116,23 +109,20 @@ int process_video(int pattern,std::string file,bool sobel)
         std::cerr << "[ERROR] could not read fps" << std::endl;
         return -1;
     }
-    int frame_ms_duration = static_cast<int>(1000 / fps);
 
+    int frame_ms_duration = static_cast<int>(1000 / fps);
+    
     while(true)
     {
-
-        //get starting time
         auto start_time = std::chrono::high_resolution_clock::now();
         //read current dimentions in order to resize accordingly
         ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
         if (size.ws_row != height || size.ws_col != width)
         {
-
             height = size.ws_row;
             width = size.ws_col;
-            //clear screen  and reset cursor to avoid messing up character printing 
+            //clear screen  to avoid messing up character printing 
             system("clear");  
-
         }
 
         video >> frame;
@@ -146,44 +136,17 @@ int process_video(int pattern,std::string file,bool sobel)
         cv::cvtColor(frame, grayScale, cv::COLOR_BGR2GRAY);
         cv::resize(grayScale,resized_mat, cv::Size(width,height), 0, 0, cv::INTER_CUBIC);
         
-        int rows = resized_mat.rows;
-        int cols = resized_mat.cols;
+        //checks if sobel argument is enabled before applying it
+        sobelOperator(resized_mat,sobel);
 
-
-        //calculate sobel operator
-        if(sobel)
-        {
-            cv::Mat grad_x,grad_y,sobel_output;
-            //Compute x gradient
-            cv::Sobel(resized_mat, grad_x, CV_64F, 1, 0, 3);
-            //Compute y gradient
-            cv::Sobel(resized_mat, grad_y, CV_64F, 0, 1, 3);
-            //Compute magnitude
-            cv::magnitude(grad_x, grad_y, sobel_output);
-
-            //normalize to 8-bit for conversion to ascii(map values to range 0-255)
-            //and store the output to resized_mat
-            //cv::NORM_MINMAX range based formula
-            cv::normalize(sobel_output, resized_mat, 0, 255, cv::NORM_MINMAX, CV_8U);
-        }
-
-        //read each pixel and print its ascii value and print to terminal
-        for(int  i = 0; i < rows; i++)
-        {
-            for(int j = 0 ; j < cols; j++)
-            {
-                int pixelValue = pixelToAscii(resized_mat.at<uchar>(i,j),pattern);
-                frame_ascii += pixelValue;
-            }
-            frame_ascii += "\n";
-        }
+        //convert current frame to ascii
+        frame_ascii = convertToAscii(resized_mat,pattern);
 
         //move the cursor and update pixels for more smooth transitions
         std::cout << RESET_CURSOR;
         std::cout << frame_ascii;
 
         auto end_time = std::chrono::high_resolution_clock::now(); // end time 
-
         //calculate processing time
        auto processing_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
         long sleep_time = frame_ms_duration - processing_time;
@@ -193,13 +156,9 @@ int process_video(int pattern,std::string file,bool sobel)
         {
              std::this_thread::sleep_for(std::chrono::milliseconds( sleep_time));
         }
-
-
-
     }
 
     video.release();
     cv::waitKey();
-
     return 0;
 }
