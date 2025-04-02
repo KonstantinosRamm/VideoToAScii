@@ -54,13 +54,10 @@ std::string convertToAscii(const cv::Mat& frame,int pattern)
 }
 
 
-
-
-
-void sobelOperator(cv::Mat & frame,bool sobel)
+void sobelOperator(cv::Mat & frame,int flags)
 {
     //calculate sobel operator
-    if(sobel)
+    if(flags & SOBEL_FLAG)
     {
         cv::Mat grad_x,grad_y,sobel_output;
         //Compute x gradient
@@ -76,3 +73,122 @@ void sobelOperator(cv::Mat & frame,bool sobel)
         cv::normalize(sobel_output, frame, 0, 255, cv::NORM_MINMAX, CV_8U);
     }
  }
+
+void SharpeningFilter(cv::Mat & frame,int flags)
+{
+    //constructor of kernel
+    cv::Mat kernel = (cv::Mat_<float>(3, 3) << 
+      0,   -1,    0,
+    -1,     5,   -1,
+      0,   -1,    0);
+
+
+
+    if(flags & SHARPEN_FLAG)
+    {
+        cv::filter2D(frame,frame,frame.depth(),kernel);
+    }
+
+                        
+}
+
+
+
+int process_video(int pattern,std::string file,int flags)
+{
+    //read video from file 
+    cv::VideoCapture video(file);
+    if(!video.isOpened())
+    {
+        std::cerr << "[ERROR] opening video\n";
+        std::cerr << "Falling back to default video\n";
+        //recheck if default video opened 
+         if(! video.open("sample/sample.mp4"))
+        {
+            std::cerr << "[ERROR] could not locate default video" << std::endl;
+            return -1;
+        }
+    }
+    //store terminal window dimensions
+    struct winsize size;
+    //dimentions  
+    int width = 0 ;
+    int height  = 0;
+    cv::Mat frame,grayScale,resized_mat;
+    //get fps 
+    double fps = video.get(cv::CAP_PROP_FPS);
+
+    //check if open cv read fps 
+    if(fps == 0)
+    {
+        std::cerr << "[ERROR] could not read fps" << std::endl;
+        return -1;
+    }
+
+    int frame_ms_duration = static_cast<int>(1000 / fps);
+    
+    while(true)
+    {
+        auto start_time = std::chrono::high_resolution_clock::now();
+        //read current dimentions in order to resize accordingly
+        ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+        if (size.ws_row != height || size.ws_col != width)
+        {
+            height = size.ws_row;
+            width = size.ws_col;
+            //clear screen  to avoid messing up character printing 
+            system("clear");  
+        }
+
+        video >> frame;
+        //check for the end of video
+        if(frame.empty())
+        {
+            break;
+        }
+        std::string frame_ascii;
+        //covert frame into grayscale
+        cv::cvtColor(frame, grayScale, cv::COLOR_BGR2GRAY);
+        cv::resize(grayScale,resized_mat, cv::Size(width,height), 0, 0, cv::INTER_CUBIC);
+        
+        applyFilters(resized_mat,flags);
+
+        //convert current frame to ascii
+        frame_ascii = convertToAscii(resized_mat,pattern);
+
+        //move the cursor and update pixels for more smooth transitions
+        std::cout << RESET_CURSOR;
+        std::cout << frame_ascii;
+
+        auto end_time = std::chrono::high_resolution_clock::now(); // end time 
+        //calculate processing time
+       auto processing_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+        long sleep_time = frame_ms_duration - processing_time;
+
+        //check if we need to wait before each frame
+        if(sleep_time > 0)
+        {
+             std::this_thread::sleep_for(std::chrono::milliseconds( sleep_time));
+        }
+    }
+
+    video.release();
+    cv::waitKey();
+    return 0;
+}
+
+
+
+
+
+
+
+
+//wrapper for all filters
+void applyFilters(cv::Mat & frame, int flags)
+{
+            //checks sobel flag and applies the filter if so
+            sobelOperator(frame,flags);
+            //checks sharpen flag and applies the filter if so
+            SharpeningFilter(frame,flags);
+}
