@@ -20,63 +20,31 @@ int main(int argc,char * argv[])
     
     int option;
     //read options from terminal
-    while ((option = getopt(argc, argv, "p:f:sS")) != -1)  // Corrected parentheses
+    while ((option = getopt(argc, argv, "p:f:sSg")) != -1)  // Corrected parentheses
     {
         switch (option)
         {
-            //pattern 
-            case 'p':
+            case 'p'://pattern
                 pattern = strToInteger(optarg);
                 break;
 
-            case 'f':
-                //check if path is empty and open default video if invalid path provided
+            case 'f'://define file
                 file = optarg;
                 break;
-            case 's':
+                
+            case 's'://sobel
                 flags |= SOBEL_FLAG;
                 break;
-            case 'S':
 
+            case 'S'://sharpening
                 flags |= SHARPEN_FLAG;
                 break;
-                
+
+            case 'g'://gaussian blur
+                flags |= GAUSSIAN_BIT;
+                break;        
         }
     }
     result = process_video(pattern,file,flags);
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

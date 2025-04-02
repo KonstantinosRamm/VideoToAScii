@@ -5,15 +5,32 @@ char pixelToAscii(int pixelValue,int ascii_index)
 {
     
     const std::string asciiChars[] = {  
-                                                                    //gradient
-                                                                     "@%#*+=-:. ",
-                                                                     //gradient reverse
-                                                                      " .:-=+*#%@",
-                                                                      //more gradient
+
+                                                                     
+                                                                    //default
+                                                                    "@%#*+=-:. ",
+
+                                                                    " .:-=+*#%@",
+
+                                                                    "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,^`'.",
+
+                                                                      " .'`^,:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$",
+
                                                                       "@%#*+=-:.                                  '",
-                                                                      //more gradient reverse
+
                                                                       "'                                 .:-=+*#%@!",
 
+                                                                    ".',-^_~()[]{}<>|/\\",
+
+                                                                    "\\/|><}{}][)(~_^-,'.)]",
+
+                                                                    "ZYXWVUTSRQPONMLKJIHGFEDCBA",
+
+                                                                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+
+                                                                    "@B8&$%#*+=-:. ,",
+
+                                                                    ", .:-=+*#%$&8B@"
     
     };
 
@@ -90,6 +107,16 @@ void SharpeningFilter(cv::Mat & frame,int flags)
     }
 
                         
+}
+
+
+
+void GaussianBlur(cv::Mat & frame,int flags)
+{
+    if(flags & GAUSSIAN_FLAG)
+    {
+        cv::GaussianBlur(frame,frame,cv::Size(9,9),0);
+    }
 }
 
 
@@ -177,13 +204,6 @@ int process_video(int pattern,std::string file,int flags)
     return 0;
 }
 
-
-
-
-
-
-
-
 //wrapper for all filters
 void applyFilters(cv::Mat & frame, int flags)
 {
@@ -191,4 +211,6 @@ void applyFilters(cv::Mat & frame, int flags)
             sobelOperator(frame,flags);
             //checks sharpen flag and applies the filter if so
             SharpeningFilter(frame,flags);
+            //checks if Gaussian Flag enabled and applies if so
+            GaussianBlur(frame,flags);
 }

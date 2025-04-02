@@ -49,6 +49,15 @@ void sobelOperator(cv::Mat & frame,int flags);
 void SharpeningFilter(cv::Mat & frame,int flags);
 
 
+/**
+ * @brief applies Gaussian Blur to the currently processed frame
+ * @param frame current frame to process
+ * @param flags checks if Gaussian flag enabled
+ */
+
+ void GaussianBlur(cv::Mat & frame,int flags);
+
+
 
 /**
  * @brief  video process function to convert to ascii
@@ -69,6 +78,7 @@ int process_video(int pattern = 0,std::string file = "sample/sample.mp4",int fla
  */
 
  void applyFilters(cv::Mat & frame, int flags);
+
 
 
 
