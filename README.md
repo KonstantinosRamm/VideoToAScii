@@ -45,6 +45,7 @@ git clone https://github.com/KonstantinosRamm/VideoToAScii.git
 git clone git@github.com:KonstantinosRamm/VideoToAScii.git
 ```
 
+# COMPILE:
 
 
 ```bash
