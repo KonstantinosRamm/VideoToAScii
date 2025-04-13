@@ -82,7 +82,7 @@ man ./man/videoToAscii.1
 ```
 or
 ```bash
-man ./manimageToAscii.1
+man ./man/ImageToAscii.1
 ```
 
 # TODO 
