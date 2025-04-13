@@ -7,30 +7,30 @@ char pixelToAscii(int pixelValue,int ascii_index)
     const std::string asciiChars[] = {  
 
                                                                      
-                                                                    //default
-                                                                    "@%#*+=-:. ",
+        //default
+        "@%#*+=-:. ",
 
-                                                                    " .:-=+*#%@",
+        " .:-=+*#%@",
 
-                                                                    "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,^`'.",
+        "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,^`'.",
 
-                                                                      " .'`^,:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$",
+        " .'`^,:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$",
 
-                                                                      "@%#*+=-:.                                  '",
+        "@%#*+=-:.                                  '",
 
-                                                                      "'                                 .:-=+*#%@!",
+        "'                                 .:-=+*#%@!",
 
-                                                                    ".',-^_~()[]{}<>|/\\",
+        ".',-^_~()[]{}<>|/\\",
 
-                                                                    "\\/|><}{}][)(~_^-,'.)]",
+        "\\/|><}{}][)(~_^-,'.)]",
 
-                                                                    "ZYXWVUTSRQPONMLKJIHGFEDCBA",
+        "ZYXWVUTSRQPONMLKJIHGFEDCBA",
 
-                                                                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 
-                                                                    "@B8&$%#*+=-:. ,",
+        "@B8&$%#*+=-:. ,",
 
-                                                                    ", .:-=+*#%$&8B@"
+        ", .:-=+*#%$&8B@"
     
     };
 

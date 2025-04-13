@@ -14,6 +14,9 @@
 #include "flags.hpp"
 
 
+#define DEFAULT_PATH "sample/sample.jpg"
+
+
 /**
  * @brief  function to calculate current pixels value and 
  * convert it into ascii character
@@ -66,7 +69,7 @@ void SharpeningFilter(cv::Mat & frame,int flags);
  * @param flags determine flags used to use appropriate filters
  * @return 0 if all operations succeeded else -1
  */
-int process_video(int pattern = 0,std::string file = "sample/sample.mp4",int flags = 0);
+int process_image(int pattern = 0,std::string file = "sample/sample.jpg",int flags = 0);
 
 
 

@@ -7,30 +7,30 @@ char pixelToAscii(int pixelValue,int ascii_index)
     const std::string asciiChars[] = {  
 
                                                                      
-                                                                    //default
-                                                                    "@%#*+=-:. ",
+        //default
+        "@%#*+=-:. ",
 
-                                                                    " .:-=+*#%@",
+        " .:-=+*#%@",
 
-                                                                    "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,^`'.",
+        "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,^`'.",
 
-                                                                      " .'`^,:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$",
+        " .'`^,:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$",
 
-                                                                      "@%#*+=-:.                                  '",
+        "@%#*+=-:.                                  '",
 
-                                                                      "'                                 .:-=+*#%@!",
+        "'                                 .:-=+*#%@!",
 
-                                                                    ".',-^_~()[]{}<>|/\\",
+        ".',-^_~()[]{}<>|/\\",
 
-                                                                    "\\/|><}{}][)(~_^-,'.)]",
+        "\\/|><}{}][)(~_^-,'.)]",
 
-                                                                    "ZYXWVUTSRQPONMLKJIHGFEDCBA",
+        "ZYXWVUTSRQPONMLKJIHGFEDCBA",
 
-                                                                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
 
-                                                                    "@B8&$%#*+=-:. ,",
+        "@B8&$%#*+=-:. ,",
 
-                                                                    ", .:-=+*#%$&8B@"
+        ", .:-=+*#%$&8B@"
     
     };
 
@@ -119,88 +119,13 @@ void GaussianBlur(cv::Mat & frame,int flags)
     }
 }
 
-
-
-int process_video(int pattern,std::string file,int flags)
+int process_image(int pattern, std::string file, int flags)
 {
-    //read video from file 
-    cv::VideoCapture video(file);
-    if(!video.isOpened())
-    {
-        std::cerr << "[ERROR] opening video\n";
-        std::cerr << "Falling back to default video\n";
-        //recheck if default video opened 
-         if(! video.open("sample/sample.mp4"))
-        {
-            std::cerr << "[ERROR] could not locate default video" << std::endl;
-            return -1;
-        }
-    }
-    //store terminal window dimensions
-    struct winsize size;
-    //dimentions  
-    int width = 0 ;
-    int height  = 0;
-    cv::Mat frame,grayScale,resized_mat;
-    //get fps 
-    double fps = video.get(cv::CAP_PROP_FPS);
+    cv::Mat test = cv::imread(file);
 
-    //check if open cv read fps 
-    if(fps == 0)
-    {
-        std::cerr << "[ERROR] could not read fps" << std::endl;
-        return -1;
-    }
+    cv::imshow("test", test);
+    cv::waitKey(0);
 
-    int frame_ms_duration = static_cast<int>(1000 / fps);
-    
-    while(true)
-    {
-        auto start_time = std::chrono::high_resolution_clock::now();
-        //read current dimentions in order to resize accordingly
-        ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
-        if (size.ws_row != height || size.ws_col != width)
-        {
-            height = size.ws_row;
-            width = size.ws_col;
-            //clear screen  to avoid messing up character printing 
-            system("clear");  
-        }
-
-        video >> frame;
-        //check for the end of video
-        if(frame.empty())
-        {
-            break;
-        }
-        std::string frame_ascii;
-        //covert frame into grayscale
-        cv::cvtColor(frame, grayScale, cv::COLOR_BGR2GRAY);
-        cv::resize(grayScale,resized_mat, cv::Size(width,height), 0, 0, cv::INTER_CUBIC);
-        
-        applyFilters(resized_mat,flags);
-
-        //convert current frame to ascii
-        frame_ascii = convertToAscii(resized_mat,pattern);
-
-        //move the cursor and update pixels for more smooth transitions
-        std::cout << RESET_CURSOR;
-        std::cout << frame_ascii;
-
-        auto end_time = std::chrono::high_resolution_clock::now(); // end time 
-        //calculate processing time
-       auto processing_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-        long sleep_time = frame_ms_duration - processing_time;
-
-        //check if we need to wait before each frame
-        if(sleep_time > 0)
-        {
-             std::this_thread::sleep_for(std::chrono::milliseconds( sleep_time));
-        }
-    }
-
-    video.release();
-    cv::waitKey();
     return 0;
 }
 

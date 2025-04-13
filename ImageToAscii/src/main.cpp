@@ -1,6 +1,7 @@
 #include <iostream>
-#include  "pixeltoascii.hpp"
+#include "pixeltoascii.hpp"
 #include "checks.hpp"
+
 
 
 
@@ -13,8 +14,8 @@ int main(int argc,char * argv[])
     //variable used to store which flags are used
     int flags = 0;
     int pattern = 0;
-    //video to open
-    std::string file ;
+    //image to open
+    std::string file = DEFAULT_PATH;
     //result value to indicate exit code
     int result = 0;
     
@@ -45,6 +46,6 @@ int main(int argc,char * argv[])
                 break;        
         }
     }
-    result = process_video(pattern,file,flags);
-    return 0;
+    result = process_image(pattern,file,flags);
+    return result;
 }

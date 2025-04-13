@@ -14,7 +14,7 @@ int main(int argc,char * argv[])
     int flags = 0;
     int pattern = 0;
     //video to open
-    std::string file ;
+    std::string file = DEFAULT_PATH;
     //result value to indicate exit code
     int result = 0;
     
@@ -46,5 +46,5 @@ int main(int argc,char * argv[])
         }
     }
     result = process_video(pattern,file,flags);
-    return 0;
+    return result;
 }

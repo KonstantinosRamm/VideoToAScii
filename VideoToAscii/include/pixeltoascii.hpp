@@ -13,6 +13,8 @@
 #include "checks.hpp"
 #include "flags.hpp"
 
+#define DEFAULT_PATH "sample/sample.mp4"
+
 
 /**
  * @brief  function to calculate current pixels value and 
@@ -62,7 +64,7 @@ void SharpeningFilter(cv::Mat & frame,int flags);
 /**
  * @brief  video process function to convert to ascii
  * @param pattern pattern to choose .If invalid number passed as argument it will return pattern 1 (index 0)
- * @param file video to open
+ * @param file image to open
  * @param flags determine flags used to use appropriate filters
  * @return 0 if all operations succeeded else -1
  */
