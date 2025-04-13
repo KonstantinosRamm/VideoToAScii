@@ -1,4 +1,7 @@
 #!/bin/bash
 
-g++ -o videoToAscii src/*.cpp -I./include `pkg-config --cflags --libs opencv4`
+#executes the scripts for videoToAscii and imageToAscii installation
+
+cd ImageToAscii && ./compile.sh
+cd ../VideoToAscii && ./compile.sh
 
