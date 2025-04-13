@@ -57,11 +57,18 @@ cd VideoToAScii
 ```
 
 
-# Run
+# Run 
 
 ```bash
 ./videoToAscii
 ```
+for video to ascii
+
+# Run
+```bash
+./imageToAscii
+```
+for image to ascii
 
 
 # Help 
@@ -73,6 +80,11 @@ cd VideoToAScii
 ```bash
 man ./man/videoToAscii.1
 ```
+or
+```bash
+man ./manimageToAscii.1
+```
 
 # TODO 
 * Try embossing effect : Tried already.not visible in ascii
+* Implement Image to ascii and add colors to the image along with the ascii characters
