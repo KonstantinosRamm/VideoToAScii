@@ -75,4 +75,4 @@ man ./man/videoToAscii.1
 ```
 
 # TODO 
-* Try embossing effect  X tried already.not visible in ascii
+* Try embossing effect : Tried already.not visible in ascii
