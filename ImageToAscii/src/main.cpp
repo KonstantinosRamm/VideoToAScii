@@ -21,7 +21,7 @@ int main(int argc,char * argv[])
     
     int option;
     //read options from terminal
-    while ((option = getopt(argc, argv, "p:f:sSg")) != -1)  // Corrected parentheses
+    while ((option = getopt(argc, argv, "p:f:sSgC")) != -1)  // Corrected parentheses
     {
         switch (option)
         {
@@ -42,10 +42,15 @@ int main(int argc,char * argv[])
                 break;
 
             case 'g'://gaussian blur
-                flags |= GAUSSIAN_BIT;
+                flags |= GAUSSIAN_FLAG;
                 break;        
+
+            case 'C'://COLORS
+                flags |= COLOR_FLAG;
+                break;
         }
     }
     result = process_image(pattern,file,flags);
+    
     return result;
 }

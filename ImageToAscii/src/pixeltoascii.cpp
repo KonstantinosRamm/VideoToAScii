@@ -62,7 +62,7 @@ std::string convertToAscii(const cv::Mat& frame,int pattern)
         for(int j = 0 ; j < cols; j++)
         {
             int pixelValue = pixelToAscii(frame.at<uchar>(i,j),pattern);
-            frame_ascii += pixelValue;
+            frame_ascii += static_cast<char>(pixelValue);  // Convert to character
         }
         frame_ascii += "\n";
     }
@@ -120,13 +120,53 @@ void GaussianBlur(cv::Mat & frame,int flags)
 }
 
 
+void ColorFilter(const cv::Mat &frame, int flags, std::string &ascii_frame)
+{
+    if (flags & COLOR_FLAG)
+    {
+        std::vector<std::string> color_vector;
+        std::string current_ansi;
+        std::string colored_ascii;
+        unsigned int red = 0, green = 0, blue = 0;
+        int width = frame.cols;
+        int height = frame.rows;
+
+        // Iterate through each pixel in the frame
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                cv::Vec3b pixel = frame.at<cv::Vec3b>(i, j);
+                blue = pixel[0];
+                green = pixel[1];
+                red = pixel[2];
+
+                // Build the ANSI escape code for the current pixel's color
+                current_ansi = "\033[38;2;" + std::to_string(red) + ";" + std::to_string(green) + ";" + std::to_string(blue) + "m";
+
+                // Push color code to the vector
+                color_vector.push_back(current_ansi);
+            }
+
+            // Add the RESET color code at the end of the line (if necessary)
+            color_vector.push_back("\033[0m");  // Reset color after each line
+        }
+
+        // Now print the color codes with the ASCII frame characters
+        for (int i = 0; i < color_vector.size(); i++) {
+              // Print color and corresponding ASCII character
+              colored_ascii += color_vector.at(i) + ascii_frame[i];
+        }
+
+        //restore the colored string in ascii_frame
+        ascii_frame = colored_ascii;
+
+    }
+}
 
 
 
 int process_image(int pattern, std::string file, int flags)
 {
     cv::Mat image = cv::imread(file);
-
     if(image.empty())
     {
         std::cerr << "[ERROR] ivalid image" << std::endl;
@@ -138,6 +178,9 @@ int process_image(int pattern, std::string file, int flags)
     int width = 0;
     int height = 0;
     cv::Mat frame,grayScale,resized_mat;
+
+
+    frame = image.clone();
 
     /*
         Intentionaly made a loop so the program runs and changes the 
@@ -154,13 +197,17 @@ int process_image(int pattern, std::string file, int flags)
             std::string frame_ascii;
             height = window_size.ws_row;
             width = window_size.ws_col;
-            //convert 
-            frame = image.clone();
             cv::cvtColor(frame,grayScale,cv::COLOR_BGR2GRAY);
             cv::resize(grayScale,resized_mat, cv::Size(width,height),0,0,cv::INTER_CUBIC);
+
+            applyFilters(resized_mat,flags);
             frame_ascii = convertToAscii(resized_mat,pattern);
+            //apply color filter if activated  
+            cv::resize(frame,frame, cv::Size(width,height),0,0,cv::INTER_CUBIC);           
+            ColorFilter(frame,flags,frame_ascii);
             std::cout << RESET_CURSOR;
             std::cout << frame_ascii;
+
         }
         
 

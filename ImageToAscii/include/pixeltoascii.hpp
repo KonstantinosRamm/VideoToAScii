@@ -14,9 +14,11 @@
 #include "flags.hpp"
 
 
+
+
 #define DEFAULT_PATH "sample/sample.jpg"
 #define WAIT_TIME 1000 // 1sec delay between each iteration
-
+#define RESET "\033[0m"
 /**
  * @brief  function to calculate current pixels value and 
  * convert it into ascii character
@@ -60,7 +62,14 @@ void SharpeningFilter(cv::Mat & frame,int flags);
 
  void GaussianBlur(cv::Mat & frame,int flags);
 
+/**
+ * @brief checks if colors enabled and applies Colors to currently processed frame 
+ * @param frame current frame to process
+ * @param flags checks if color flag is enabled
+ * @param ascii_frame frame to apply the colors
+ */
 
+ void ColorFilter(const cv::Mat & frame,int flags,std::string & ascii_frame);
 
 /**
  * @brief  video process function to convert to ascii
@@ -74,6 +83,10 @@ int process_image(int pattern = 0,std::string file = "sample/sample.jpg",int fla
 
 
 
+
+
+
+
 /**
  * @brief wrapper that applies the filters to each frame 
  * @param frame current frame to be processed
@@ -81,6 +94,10 @@ int process_image(int pattern = 0,std::string file = "sample/sample.jpg",int fla
  */
 
  void applyFilters(cv::Mat & frame, int flags);
+
+
+
+
 
 
 
