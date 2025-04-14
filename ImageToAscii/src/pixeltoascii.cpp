@@ -119,15 +119,67 @@ void GaussianBlur(cv::Mat & frame,int flags)
     }
 }
 
+
+
+
+
 int process_image(int pattern, std::string file, int flags)
 {
-    cv::Mat test = cv::imread(file);
+    cv::Mat image = cv::imread(file);
 
-    cv::imshow("test", test);
-    cv::waitKey(0);
+    if(image.empty())
+    {
+        std::cerr << "[ERROR] ivalid image" << std::endl;
+        return -1;
+    }
 
+    //store terminal window dimensions
+    struct winsize window_size;
+    int width = 0;
+    int height = 0;
+    cv::Mat frame,grayScale,resized_mat;
+
+    /*
+        Intentionaly made a loop so the program runs and changes the 
+        ascii art size dynamically based on size of terminal dimensions
+    */
+    while(true)
+    {
+        //read current dimensions of window
+        ioctl(STDOUT_FILENO, TIOCGWINSZ, &window_size);
+
+        //check if resize needed
+        if (window_size.ws_row != height || window_size.ws_col != width)
+        {
+            std::string frame_ascii;
+            height = window_size.ws_row;
+            width = window_size.ws_col;
+            //convert 
+            frame = image.clone();
+            cv::cvtColor(frame,grayScale,cv::COLOR_BGR2GRAY);
+            cv::resize(grayScale,resized_mat, cv::Size(width,height),0,0,cv::INTER_CUBIC);
+            frame_ascii = convertToAscii(resized_mat,pattern);
+            std::cout << RESET_CURSOR;
+            std::cout << frame_ascii;
+        }
+        
+
+        //1 second delay between each iteration
+        
+        std::this_thread::sleep_for(std::chrono::milliseconds(WAIT_TIME));
+
+
+    }
+
+    
+    cv::waitKey();
+    
     return 0;
 }
+
+
+
+
 
 //wrapper for all filters
 void applyFilters(cv::Mat & frame, int flags)

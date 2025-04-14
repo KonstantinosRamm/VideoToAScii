@@ -15,7 +15,7 @@
 
 
 #define DEFAULT_PATH "sample/sample.jpg"
-
+#define WAIT_TIME 1000 // 1sec delay between each iteration
 
 /**
  * @brief  function to calculate current pixels value and 

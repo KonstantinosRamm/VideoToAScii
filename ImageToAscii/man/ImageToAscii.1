@@ -1,11 +1,11 @@
 .TH VideoToAscii 1 "March 2025" "Version1.0" "User commands"
 .SH NAME
-VideoToAscii \- Convert video files into ASCII art.
+imageToAscii \- Converts an image into ASCII art.
 .SH SYNOPSIS
-.B videoToAscii
+.B imageToAscii
 [\fIOPTIONS\fR] \fIFILE\fR
 .SH DESCRIPTION
-VideoToAscii is a tool that processes video frames using OpenCV and represents it into the terminal as ASCII Art.
+ImageToAscii is a tool that process pictures into frames using OpenCV and represents it into the terminal as ASCII Art.
 .SH OPTIONS
 .TP
 .B \-p \fINUMBER\fR, \-\-pattern \fINUMBER\fR
@@ -25,8 +25,8 @@ Select an ASCII pattern .In case of invalid number the default pattern is used i
  11 ", .:-=+*#%$&8B@"
 
 .B \-f \fIFILE\fR, \-\-file \fIFILE\fR
-Specify a custom video file to process.If non provided the default is used instead
-which is located at sample/sample.mp4
+Specify a custom source file to process.If non provided the default is used instead
+which is located at sample/sample.jpg
 .TP
 .B \-s, \-\-sobel
 Apply the Sobel operator to enchance edges before converting the frame to ASCII
