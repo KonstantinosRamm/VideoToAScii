@@ -63,15 +63,11 @@ git clone git@github.com:KonstantinosRamm/VideoToAScii.git
 cd ./build
 ```
 
-
-
-
 ```bash
 ./videoToAscii
 ```
 for video to ascii
 
-# OR
 
 ```bash
 ./imageToAscii
