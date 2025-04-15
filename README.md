@@ -71,7 +71,8 @@ cd ./build
 ```
 for video to ascii
 
-# Run
+# OR
+
 ```bash
 ./imageToAscii
 ```
