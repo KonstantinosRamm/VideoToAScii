@@ -166,6 +166,7 @@ void ColorFilter(const cv::Mat &frame, int flags, std::string &ascii_frame)
 
 int process_image(int pattern, std::string file, int flags)
 {
+    std::vector<std::string> color_vector;
     cv::Mat image = cv::imread(file);
     if(image.empty())
     {
@@ -196,13 +197,16 @@ int process_image(int pattern, std::string file, int flags)
         {
             std::string frame_ascii;
             height = window_size.ws_row;
-            width = window_size.ws_col;
+            width = window_size.ws_col;          
+
+            //convert to grayScale and resize
             cv::cvtColor(frame,grayScale,cv::COLOR_BGR2GRAY);
             cv::resize(grayScale,resized_mat, cv::Size(width,height),0,0,cv::INTER_CUBIC);
-
+            
             applyFilters(resized_mat,flags);
             frame_ascii = convertToAscii(resized_mat,pattern);
             //apply color filter if activated  
+            //the resize occurs just in case we use Color Filter since not resizing the frame will cause a distorted image
             cv::resize(frame,frame, cv::Size(width,height),0,0,cv::INTER_CUBIC);           
             ColorFilter(frame,flags,frame_ascii);
             std::cout << RESET_CURSOR;
