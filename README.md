@@ -1,6 +1,8 @@
 # VideoToAscii
 
-A C++ application that converts video files into ASCII art. This tool processes video frames through OpenCV and translates them into text-based representations.
+This C++ application transforms video files and images into ASCII art using OpenCV.
+The tool processes video frames and generates text-based representations, allowing 
+you to view video content in a completely new format.
 
 
 # Prerequisites
@@ -14,7 +16,11 @@ A C++ application that converts video files into ASCII art. This tool processes 
 # Features
 * Custom Video Path
 * Choose between a range of patterns
-* Sobel operator filter for edge detection 
+* Sobel operator filter for edge detection
+* Gaussian Blur
+* Sharpening filter
+* Convert image to ascii with or without color (using Ansi escape codes) although the pattern will affect the visuals of the ascii art 
+
 
 # Installation
 First install opencv and opencv-devel
@@ -47,17 +53,18 @@ git clone git@github.com:KonstantinosRamm/VideoToAScii.git
 
 # COMPILE:
 
-
-```bash
-cd VideoToAScii
-```
-
 ```bash
 ./compile.sh
 ```
 
 
 # Run 
+```bash
+cd ./build
+```
+
+
+
 
 ```bash
 ./videoToAscii
@@ -84,7 +91,3 @@ or
 ```bash
 man ./man/ImageToAscii.1
 ```
-
-# TODO 
-* Try embossing effect : Tried already.not visible in ascii
-* Implement Image to ascii and add colors to the image along with the ascii characters
